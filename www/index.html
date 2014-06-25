@@ -31,6 +31,12 @@
 <body onload="drawRoulette();drawResults();">
     <canvas id="myCanvas" width="670" height="300"></canvas>
     <script type="text/javascript">
+    
+var windowWidth = window.innerWidth;
+var windowHeight = window.innerHeight;
+var pixelRatio = window.devicePixelRatio || 1; /// get pixel ratio of device
+
+alert("windowWidth " + windowWidth + " windowHeight " + windowHeight +         " pixelRatio " + pixelRatio);
         var canvas = document.getElementById('myCanvas');
         var context = canvas.getContext('2d');
 
