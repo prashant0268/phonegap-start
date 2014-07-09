@@ -16,6 +16,9 @@
         Vedant Technologies
     </author>
 
+    <preference name="phonegap-version" value="3.3.0" />
+
+
     <!--
         Enable individual API permissions by defining each here.
         The 'device' permission is required for the 'deviceready' event.
