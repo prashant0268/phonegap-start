@@ -28,6 +28,7 @@
 
 <body onload="drawRoulette();drawResults();">
     <canvas id="myCanvas" width="970" height="600"></canvas>
+    
     <script type="text/javascript">
         var canvas = document.getElementById('myCanvas');
         var context = canvas.getContext('2d');
@@ -40,12 +41,11 @@
         var areaHeight = 300;
         var areaRatio = 1.87;
 
-
-    //alert("windowWidth " + windowWidth + " windowHeight " + windowHeight + " pixelRatio " + pixelRatio);
+        //alert("windowWidth " + windowWidth + " windowHeight " + windowHeight + " pixelRatio " + pixelRatio);
 
         var factor = 10;
-        var buffX = 20;
-        var buffY = 20;
+        var buffX = 200;
+        var buffY = 150;
 
         //var xFact = Math.floor(windowWidth / areaWidth);
         //var yFact = Math.floor(windowHeight / areaHeight);
@@ -53,22 +53,22 @@
         var yFact = windowHeight / areaHeight * 0.9;
         var fact = xFact < yFact ? xFact : yFact;
 
-        factor = factor * fact * pixelRatio;
+        var options = {};
+        var inputStr = "";
+        var inputArray = [];
 
-        //alert(factor);
+        factor = factor * fact * pixelRatio;
 
         if (windowWidth >= areaWidth && windowHeight >= areaHeight) {
             buffX = (windowWidth - areaWidth * factor / 10) / 2;
             buffY = (windowHeight - areaHeight * factor / 10) / 2;
         }
 
-
         canvas.width = buffX * 2 + 14 * 4 * factor;
         canvas.height = buffY * 2 + 6 * 5 * factor;
 
-        //alert("windowWidth " + windowWidth + " windowHeight " + windowHeight + " pixelRatio " + pixelRatio);
-
         function drawRoulette() {
+            context.globalAlpha = 1;
             context.rect(0, 0, canvas.width, canvas.height);
             // add linear gradient
             var grd = context.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -194,21 +194,9 @@
 
             drawRectangle(context, 5 * 4 * factor + buffX + (0.5 * factor), 4.5 * 5 * factor + buffY, 'red');
             drawRectangle(context, 7 * 4 * factor + buffX + (0.5 * factor), 4.5 * 5 * factor + buffY, 'black');
-        }
-          
-        var options = {};
-        //options.numbers = [[5, 3], [3, 2]];
-        //options.n1st12 = 30;
-        //options.n2nd12 = 50;
-        //options.n3rd12 = 20;
-        //options.n1to18 = 30;
-        //options.n19to36 = 70;
-        //options.even = 30;
-        //options.odd = 70;
-        //options.red = 30;
-        //options.black = 70;
 
-        options = calculateResults();
+            drawInputButtons();
+        }
 
         function promptNumber() {
             var number = prompt("Enter a number or ',' seperated series", "");
@@ -237,17 +225,34 @@
 
         }
 
-        function calculateResults(seed) {
+        function redrawRoulette() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawRoulette();
+            drawInputArray();
+            drawInputStr(inputStr);
+        }
+
+        function calculateResults() {
+
+
+            //var line = ",1,4,5,8,3,0,1,2,4,5,6,7,8,0,1,4,0,1,2,6,";
+
+            var seed;
+
+            if (inputArray.length == 3) {
+                redrawRoulette();
+                seed = "," + inputArray.join(",") + ",";
+            } else {
+                return;
+                //seed = ",15,23,25,";
+            }
+            //seed = ",15,23,25,";
+            //seed = ",0,1,2,";
 
             var res = {};
             res.numbers = [];
 
-            //var line = ",1,4,5,8,3,0,1,2,4,5,6,7,8,0,1,4,0,1,2,6,";
-
-            seed = ",15,23,25,";
-            //seed = ",0,1,2,";
-
-            var startIndex= 0;
+            var startIndex = 0;
             var index=0, count=0;
             var before, after;
             var c00=0, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0, c8=0, c9=0, c10=0, c11=0, c12=0, c13=0, c14=0, c15=0, c16=0, c17=0, c18=0, c19=0, c20=0, c21=0, c22=0, c23=0, c24=0, c25=0, c26=0, c27=0, c28=0, c29=0, c30=0, c31=0, c32=0, c33=0, c34=0, c35=0, c36=0;
@@ -262,10 +267,10 @@
                     before = line.substring(0, index);
                     before = before.substring(before.lastIndexOf(',') + 1, before.lastIndexOf(',') + before.length - before.lastIndexOf(','));
                     beforeafter.push(before);
-                    console.log("before  is : " + before);
+                    //console.log("before  is : " + before);
                     after = line.substring(index + seed.length, line.indexOf(",", index + seed.length));
                     beforeafter.push(after);
-                    console.log("after  is : " + after);
+                    //console.log("after  is : " + after);
                     count++;
                     startIndex = index + 1;
                     //Console.WriteLine("Index is : " + index);
@@ -525,7 +530,9 @@
             res.odd = cOdd;
             res.red = cRed;
 
-            return res;
+            options = res;
+
+            drawResults();
         }
 
         function drawResults() {
@@ -591,6 +598,26 @@
             //context.stroke();
         }
 
+        function drawButtonRectangle(context, x1, y1, color, nmbr) {
+            context.beginPath();
+            context.rect(x1, y1, (4 * factor) - (0.2 * factor), (3 * factor));
+            context.fillStyle = color;
+            context.fill();
+            context.fillStyle = 'white';
+            context.font = 1.2 * factor + 'pt Calibri';
+            context.fillText(nmbr, x1 + (2 * factor), y1 + (2.0 * factor));
+        }
+
+        function drawButtonTextRectangle(context, x1, y1, color, text) {
+            context.beginPath();
+            context.rect(x1, y1, (8 * factor) - (0.2 * factor), (3 * factor));
+            context.fillStyle = color;
+            context.fill();
+            context.fillStyle = 'black';
+            context.font = 1.2 * factor + 'pt Calibri';
+            context.fillText(text, x1 + (4 * factor), y1 + (2.0 * factor));
+        }
+
         function drawProbability(context, x1, y1, percent) {
             percent = Math.round(percent);
             context.globalAlpha = percent / 100;
@@ -642,7 +669,100 @@
 
         }
 
-    </script>
+        function drawInputButtons() {
+            for (var i = 0; i < 10; i++) {
+                drawButtonRectangle(context, i * 4 * factor + buffX, 5.5 * 5 * factor + buffY, 'gray', i);
+            }
+            drawButtonTextRectangle(context, 10 * 4 * factor + buffX, 5.5 * 5 * factor + buffY, 'lightyellow', 'Cancel');
+            drawButtonTextRectangle(context, 12 * 4 * factor + buffX, 5.5 * 5 * factor + buffY, 'lightyellow', 'Enter');
+            //alert();
+        }
+
+        function drawInputStr(inputStr) {
+            if (inputStr.length < 3) {
+                context.clearRect(buffX, 4.6 * 5 * factor + buffY, 4 * factor - (0.3 * factor), 2 * factor);
+
+                context.globalAlpha = 0.5;
+                context.beginPath();
+                context.rect(buffX, 4.6 * 5 * factor + buffY, 4 * factor - (0.3 * factor), 2 * factor);
+                context.fillStyle = 'green';
+                context.fill();
+
+                context.fillStyle = 'white';
+                context.font = 1.2 * factor + 'pt Calibri';
+                context.fillText(inputStr, 2 * factor + buffX, 4.9 * 5 * factor + buffY);
+            }
+        }
+
+        function drawInputArray() {
+            context.clearRect(buffX, 3.1 * 5 * factor + buffY, 4 * factor - (0.3 * factor), 7 * factor);
+
+            context.globalAlpha = 0.5;
+            context.beginPath();
+            context.rect(buffX, 3.1 * 5 * factor + buffY, 4 * factor - (0.3 * factor), 7 * factor);
+            context.fillStyle = 'green';
+            context.fill();
+
+            context.fillStyle = 'white';
+            context.font = 1.2 * factor + 'pt Calibri';
+
+            for (var i = 0; i < inputArray.length; i++) {
+                context.fillText(inputArray[i], 2 * factor + buffX, 3.1 * 5 * factor + buffY + ((2 * i + 2) * factor));
+            }
+            if (inputArray.length == 3) {
+                var str = "," + inputArray.join(",") + ",";
+            }
+        }
+
+        canvas.addEventListener('click', function (event) {
+            //alert(event.pageX + "  " + event.pageY);
+            for (var i = 0; i < 10; i++) {
+                if (event.pageX > i * 4 * factor + buffX & event.pageX < (i * 4 * factor + buffX) + (4 * factor) - (0.2 * factor) &&
+                    event.pageY > 5.5 * 5 * factor + buffY && event.pageY < (5.5 * 5 * factor + buffY) + (3 * factor)) {
+                    var tempStr = inputStr + i.toString();
+                    if (tempStr != "00") {
+                        var nmbr = parseInt(tempStr);
+                        if (nmbr > 36) {
+                            alert("Number cannot be greater than 36.");
+                            return;
+                        }
+                    }
+                    inputStr += i.toString();
+                    drawInputStr(inputStr);
+                }
+            }
+            if (event.pageX > 10 * 4 * factor + buffX & event.pageX < (10 * 4 * factor + buffX) + (8 * factor) - (0.2 * factor) &&
+                event.pageY > 5.5 * 5 * factor + buffY && event.pageY < (5.5 * 5 * factor + buffY) + (3 * factor)) {
+                inputStr = "";
+                drawInputStr(inputStr)
+            }
+            if (event.pageX > 12 * 4 * factor + buffX & event.pageX < (12 * 4 * factor + buffX) + (8 * factor) - (0.2 * factor) &&
+                event.pageY > 5.5 * 5 * factor + buffY && event.pageY < (5.5 * 5 * factor + buffY) + (3 * factor)) {
+                if (inputArray.length >= 3) {
+                    inputArray.shift();
+                }
+                if (inputStr != "00") {
+                    inputStr = parseInt(inputStr).toString();
+                }
+                inputArray.push(inputStr);
+                drawInputArray();
+                inputStr = "";
+                drawInputStr(inputStr);
+                calculateResults();
+            }
+            //var x = event.pageX - elemLeft,
+            //    y = event.pageY - elemTop;
+            //// Collision detection between clicked offset and element.
+            //elements.forEach(function (element) {
+            //    if (y > element.top && y < element.top + element.height
+            //        && x > element.left && x < element.left + element.width) {
+            //        alert('clicked an element');
+            //    }
+            //});
+
+        }, false);
+
+    </script>    
 </body>
 
 
