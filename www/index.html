@@ -26,7 +26,7 @@
         <title></title>
     </head>
 
-<body onload="drawRoulette();drawResults();">
+<body onload="drawRoulette();">
     <canvas id="myCanvas" width="970" height="600"></canvas>
     
     <script type="text/javascript">
@@ -40,6 +40,8 @@
         var areaWidth = 560;
         var areaHeight = 300;
         var areaRatio = 1.87;
+        
+        var firstTimeLoading = true;
 
         //alert("windowWidth " + windowWidth + " windowHeight " + windowHeight + " pixelRatio " + pixelRatio);
 
@@ -171,6 +173,8 @@
             drawCircle(context, 12.5 * 4 * factor + buffX, 0.5 * 5 * factor + buffY, 1.5 * factor, 'red', 36);
             drawCircle(context, 12.5 * 4 * factor + buffX, 1.5 * 5 * factor + buffY, 1.5 * factor, 'black', 35);
             drawCircle(context, 12.5 * 4 * factor + buffX, 2.5 * 5 * factor + buffY, 1.5 * factor, 'red', 34);
+
+            firstTimeLoading = false;
 
             drawText(context, '1st 12', 'white', 1.2 * factor + 'pt Calibri', 3 * 4 * factor + buffX, 3.5 * 5 * factor + buffY + (0.5 * factor));
             drawText(context, '2nd 12', 'white', 1.2 * factor + 'pt Calibri', 7 * 4 * factor + buffX, 3.5 * 5 * factor + buffY + (0.5 * factor));
@@ -565,11 +569,22 @@
 
             context.fillStyle = 'white';
             context.font = 1.2 * factor + 'pt Calibri';
-            if (nmbr < 10) {
-                context.fillText(nmbr, x1 - (.45 * factor), y1 + (.45 * factor));
-            }
-            else {
-                context.fillText(nmbr, x1 - (.8 * factor), y1 + (.45 * factor));
+            
+            if(firstTimeLoading){
+                if (nmbr < 10) {
+                    context.fillText(nmbr, x1 - (.45 * factor), y1 + (.45 * factor));
+                }
+                else {
+                    context.fillText(nmbr, x1 - (.8 * factor), y1 + (.45 * factor));
+                }
+            }else{
+                if (nmbr < 10) {
+                    context.fillText(nmbr, x1, y1 + (.45 * factor));
+                }
+                else {
+                    context.fillText(nmbr, x1, y1 + (.45 * factor));
+                }
+                
             }
         }
 
