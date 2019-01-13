@@ -5,6 +5,8 @@ var myApp = new Framework7();
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 
+window.screen.orientation.lock('landscape')
+
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 
@@ -17,8 +19,6 @@ var areaHeight = 300;
 var areaRatio = 1.87;
 
 var firstTimeLoading = true;
-
-//alert("windowWidth " + windowWidth + " windowHeight " + windowHeight + " pixelRatio " + pixelRatio);
 
 var factor = 10;
 var buffX = 200;
