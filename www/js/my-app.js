@@ -10,6 +10,11 @@ window.screen.orientation.lock('landscape')
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
 
+var mySwiper = myApp.swiper('.swiper-container', {
+    pagination:'.swiper-pagination'
+});
+
+
 var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
 var pixelRatio = 1; //window.devicePixelRatio || 1; /// get pixel ratio of device

@@ -13,3 +13,43 @@
 .statusbar-overlay {
     background: #000000;
 }
+
+/* A bit of demo styles */;
+.swiper-container {
+  height: 100%;
+}
+.swiper-slide {
+  /*background:#fff;*/
+  text-align: center;
+}
+.swiper-slide span {
+  text-align:center;
+  display:block;
+  margin:20px;
+  font-size:21px;
+}
+.step-img{
+  margin-bottom: 40px;
+}
+.step-number{
+padding: 10px 0px;
+    font-size: 22px;
+    color: white;
+    text-transform: uppercase;
+    background: salmon;
+}
+.step-text{
+    font-size: 18px;
+    padding: 12px 40px;
+    line-height: 1.1;
+}
+.get-started{
+  float: right;
+  margin-right: 40px;
+  font-size: 25px;
+  padding: 10px 30px;
+  background: tomato;
+  border-radius: 4px;
+  margin-top: 20px;
+  color: white;
+}

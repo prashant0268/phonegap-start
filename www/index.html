@@ -10,7 +10,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'  'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
 
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -31,9 +31,27 @@
     <link rel="stylesheet" href="lib/framework7/css/framework7.ios.colors.min.css">
 
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        function showCanvas() {
+          document.getElementById('swiperContainer').style.display = "none";
+          document.getElementById('myCanvas').style.display = "block";
+          window.localStorage.setItem('startUpMessageSeen', true);
+        }
+        function showHideCanvas() {
+            var storage = window.localStorage;
+            var startUpMessageSeen = storage.getItem('startUpMessageSeen'); // Pass a key name to get its value.
+            if(startUpMessageSeen === 'true'){
+              document.getElementById('swiperContainer').style.display = "none";
+              document.getElementById('myCanvas').style.display = "block";
+            }else{
+              document.getElementById('swiperContainer').style.visibility = "visible";
+              document.getElementById('myCanvas').style.display = "none";
+            }
+        }
+    </script>
 </head>
 
-<body>
+<body onload="showHideCanvas();">
     <!-- Views -->
     <div class="views">
         <div class="view view-main">
@@ -42,7 +60,43 @@
                 <!-- Page, "data-page" contains page name -->
                 <div data-page="index" class="page">
                     <!-- Scrollable page content -->
-                    <canvas id="myCanvas" width="970" height="600"></canvas>
+
+                    <!-- Slider container -->
+
+                    <div class="swiper-container" id="swiperContainer" style="visibility:hidden">
+                        <!-- Slides wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            <div class="swiper-slide">
+                                <div class="step-number">Welcome</div>
+                                <div class="step-text">Start using the Roulette Predictor in 3 easy steps.</div>
+                                <div class="step-img"><img height="140px" src="img/screenshot2.png" /></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="step-number">Step 1</div>
+                                <div class="step-text">Using the number pad and the Enter button, please select the last 3 rolls.</div>
+                                <div class="step-img"><img width="360px" src="img/numberpad.png" /></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="step-number">Step 2</div>
+                                <div class="step-text">The selected numbers appear in the roll stack and as you enter the 3rd roll,
+                                    the probabilities appear on the board.</div>
+                                <div class="step-img"><img height="140px" src="img/rollstack.png" /></div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="step-number">Step 3</div>
+                                <div class="step-text">Based on the algorithm, you will see the number of times a particular roll appeared after the enetered combination of last 3 rolls.</div>
+                                <div class="step-img" style="text-align: left; padding-left: 50px;">
+                                    <img height="140px" src="img/numberprobability.png" />
+                                    <div class="get-started" onclick="showCanvas();">Get Started</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Pagination, if required -->
+                        <div class="swiper-pagination"></div>
+                    </div>
+
+                    <canvas style="display:none" id="myCanvas" width="970" height="600"></canvas>
                 </div>
             </div>
         </div>
